@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="users",uniqueConstraints =@UniqueConstraint(name = "user_name",columnNames={"name","email"}))
-public class UserDetail {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,14 +21,14 @@ public class UserDetail {
     @Column(name = "created")
     private LocalDateTime created;
 
-    public UserDetail(String name, String userName, String password, LocalDateTime created) {
+    public User(String name, String userName, String password, LocalDateTime created) {
         this.name = name;
         this.userName = userName;
         this.password = password;
         this.created = created;
     }
 
-    public UserDetail() {
+    public User() {
 
     }
 
@@ -66,5 +66,13 @@ public class UserDetail {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -1,47 +1,64 @@
 package com.example.ToDo.Entities;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@Table(name="tasks")
 public class Task {
+
     public enum TaskStatus{
         Pending,
         Completed
-    }
-    public enum TaskType{
-        Task,
-        SubTask
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "user_name")
-    private Long userName;
+    private String userName;
     @Column(name = "title")
     private String title;
     @Column(name = "description")
     private String description;
     @Column(name = "status")
     private TaskStatus status;
-    @Column(name = "type")
-    private TaskType type;
     @Column(name = "due_date")
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
     @Column(name = "created")
     private LocalDateTime created;
 
-    public Task(String title, String description, TaskStatus status, TaskType type, LocalDateTime dueDate, LocalDateTime created) {
+    @JsonManagedReference
+    @OneToMany(
+            mappedBy = "parentTask",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch =FetchType.EAGER
+    )
+    private List<SubTask> subtasks = new ArrayList<>();
+
+    public Task() {
+
+    }
+
+    public Task(String userName, String title, String description, TaskStatus status, LocalDate dueDate, LocalDateTime created, List<SubTask> subTasks) {
+        this.userName = userName;
         this.title = title;
         this.description = description;
         this.status = status;
-        this.type = type;
         this.dueDate = dueDate;
         this.created = created;
     }
 
-    public Task() {
+    public void setSubtasks(List<SubTask> subtasks) {
+        this.subtasks = subtasks;
     }
 
     public Long getId() {
@@ -72,19 +89,20 @@ public class Task {
         this.status = status;
     }
 
-    public TaskType getType() {
-        return type;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setType(TaskType type) {
-        this.type = type;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public LocalDateTime getDueDate() {
+
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 

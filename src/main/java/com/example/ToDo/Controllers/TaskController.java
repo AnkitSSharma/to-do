@@ -24,15 +24,10 @@ public class TaskController {
         return taskService.createTask(userName,task);
     }
     @GetMapping("/task/getall")
-    List<Task> getAllTask(@RequestHeader(value="Authorization") String jwt,@RequestParam(value="status", required = false) Task.TaskStatus status){
+    List<Task> getAllTask(@RequestHeader(value="Authorization") String jwt,@RequestParam(value="status", required = false) Task.TaskStatus status,@RequestParam(value = "title",required = false) String title){
         jwt = jwt.substring(7);
         String userName = jwtUtil.extractUsername(jwt);
-        return taskService.getAllTask(userName,status);
+        return taskService.getAllTask(userName,status,title);
     }
-    @GetMapping("/task/getbytitle")
-    List<Task> getAllByTask(@RequestHeader(value="Authorization") String jwt,@RequestParam(value = "title") String title){
-        jwt = jwt.substring(7);
-        String userName = jwtUtil.extractUsername(jwt);
-        return taskService.getAllByTitle(userName,title);
-    }
+
 }

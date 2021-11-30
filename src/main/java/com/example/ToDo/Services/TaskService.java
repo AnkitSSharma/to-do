@@ -25,11 +25,16 @@ public class TaskService {
         return ResponseEntity.ok("Task Created Successfully");
     }
 
-    public List<Task> getAllTask(String userName, Task.TaskStatus status) {
+    public List<Task> getAllTask(String userName, Task.TaskStatus status, String title) {
+        if(title!=null){
+            return taskRepository.getByUserNameAndTitleContainsIgnoreCase(userName,title);
+        }
+
         if(status==null){
             return taskRepository.getAllByUserName(userName);
         }
-            return taskRepository.getAllByUserNameAndStatus(userName,status);
+
+        return taskRepository.getAllByUserNameAndStatus(userName,status);
 
     }
 

@@ -46,7 +46,7 @@ public class TaskService {
         if(title!=null){
             if (DueDateFilter.Today.equals(dueDate)) {
 
-                return taskRepository.getAllByDueDateAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now().minusHours(23), userName,title);
+                return taskRepository.getAllByDueDateBetweenAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now().minusHours(23), LocalDateTime.now(), userName,title, Sort.by("dueDate"));
             }
             if (DueDateFilter.Overdue.equals(dueDate)) {
 
@@ -62,7 +62,7 @@ public class TaskService {
         else if(dueDate!=null){
             if (DueDateFilter.Today.equals(dueDate)) {
 
-                return taskRepository.getAllByDueDateAndUserName(LocalDateTime.now().minusHours(23), userName);
+                return taskRepository.getAllByDueDateBetweenAndUserName(LocalDateTime.now().minusHours(23), LocalDateTime.now(), userName, Sort.by("dueDate"));
             }
             if (DueDateFilter.Overdue.equals(dueDate)) {
 

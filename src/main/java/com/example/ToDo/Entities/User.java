@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="users",uniqueConstraints =@UniqueConstraint(name = "user_name",columnNames={"user_name","email"}))
+@Table(name="users",uniqueConstraints =@UniqueConstraint(name = "user_name",columnNames={"user_name"}))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

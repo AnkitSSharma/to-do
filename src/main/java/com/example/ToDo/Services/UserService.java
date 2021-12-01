@@ -22,6 +22,11 @@ public class UserService {
                     "Incorrect Inputs",
                     HttpStatus.BAD_REQUEST);
         }
+        if(userRepository.existsByUserName(user.getUserName())){
+            return new ResponseEntity<>(
+                    "User Name Already Taken",
+                    HttpStatus.BAD_REQUEST);
+        }
         String unHashedPassword = user.getPassword();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(unHashedPassword);

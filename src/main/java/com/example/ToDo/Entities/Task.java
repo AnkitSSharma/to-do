@@ -31,9 +31,11 @@ public class Task {
     @Column(name = "status")
     private TaskStatus status;
     @Column(name = "due_date")
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
     @Column(name = "created")
     private LocalDateTime created;
+    @Column(name = "reminderBefore")
+    private Integer reminderBefore;
 
     @JsonManagedReference
     @OneToMany(
@@ -48,13 +50,17 @@ public class Task {
 
     }
 
-    public Task(String userName, String title, String description, TaskStatus status, LocalDate dueDate, LocalDateTime created, List<SubTask> subTasks) {
+    public Task(String userName, String title, String description, TaskStatus status, LocalDateTime dueDate, LocalDateTime created, List<SubTask> subTasks) {
         this.userName = userName;
         this.title = title;
         this.description = description;
         this.status = status;
         this.dueDate = dueDate;
         this.created = created;
+    }
+
+    public List<SubTask> getSubtasks() {
+        return subtasks;
     }
 
     public void setSubtasks(List<SubTask> subtasks) {
@@ -97,12 +103,11 @@ public class Task {
         this.userName = userName;
     }
 
-
-    public LocalDate getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -112,5 +117,13 @@ public class Task {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public Integer getReminderBefore() {
+        return reminderBefore;
+    }
+
+    public void setReminderBefore(Integer reminderBefore) {
+        this.reminderBefore = reminderBefore;
     }
 }

@@ -27,7 +27,7 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/user/login")
-    public ResponseEntity<String> isValid(@Valid @RequestBody User user){
+    public ResponseEntity<String> isValid(@RequestBody User user){
         if(userService.isValid(user.getUserName(),user.getPassword())) {
             UserDetails userDetails = myuserDetailService.loadUserByUsername(user.getUserName());
             String jwt = jwtUtil.generateToken((MyUserDetailImpl) userDetails);
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    ResponseEntity<String> createUser(@RequestBody User user){
+    ResponseEntity<String> createUser(@Valid @RequestBody User user){
         return userService.createUser(user);
     }
 

@@ -37,7 +37,7 @@ public class TaskController {
         return taskService.createSubTask(userName,subTask,taskId);
     }
     @GetMapping("/task/getall")
-    List<Task> getAllTask(@RequestHeader(value="Authorization") String jwt, @RequestParam(value="status", required = false) Task.TaskStatus status, @RequestParam(value = "title",required = false) String title,@RequestParam(value = "duedate",required = false) String duedate){
+    List<Task> getAllTask(@RequestHeader(value="Authorization") String jwt, @RequestParam(value="status", required = false) Task.TaskStatus status, @RequestParam(value = "title",required = false) String title,@RequestParam(value = "duedate",required = false) TaskService.DueDateFilter duedate){
         jwt = jwt.substring(7);
         String userName = jwtUtil.extractUsername(jwt);
         System.out.println(duedate);

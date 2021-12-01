@@ -17,6 +17,12 @@ import java.util.List;
 
 @Component
 public class TaskService {
+    public enum DueDateFilter{
+        Today,
+        Overdue,
+        ThisWeek,
+        NextWeek
+    }
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
@@ -30,7 +36,7 @@ public class TaskService {
         return ResponseEntity.ok("Task Created Successfully");
     }
 
-    public List<Task> getAllTask(String userName, Task.TaskStatus status, String title, String dueDate) {
+    public List<Task> getAllTask(String userName, Task.TaskStatus status, String title, DueDateFilter dueDate) {
         if(status!=null){
             return taskRepository.getAllByUserNameAndStatus(userName,status, Sort.by("dueDate"));
         }
@@ -38,34 +44,34 @@ public class TaskService {
             return taskRepository.getByUserNameAndTitleContainsIgnoreCase(userName,title,Sort.by("dueDate"));
         }
         if(title!=null){
-            if (dueDate.equals("Today")) {
+            if (DueDateFilter.Today.equals(dueDate)) {
 
                 return taskRepository.getAllByDueDateEqualsAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), userName,title);
             }
-            if (dueDate.equals("Overdue")) {
+            if (DueDateFilter.Overdue.equals(dueDate)) {
 
                 return taskRepository.getAllByDueDateIsBeforeAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), userName,title, Sort.by("dueDate"));
             }
-            if (dueDate.equals("This Week")) {
+            if (DueDateFilter.ThisWeek.equals(dueDate)) {
                 return taskRepository.getAllByDueDateBetweenAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), LocalDate.now().plusDays(6), userName,title, Sort.by("dueDate"));
             }
-            if (dueDate.equals("Next Week")) {
+            if (DueDateFilter.NextWeek.equals(dueDate)) {
                 return taskRepository.getAllByDueDateBetweenAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now().plusDays(7), LocalDate.now().plusDays(13), userName,title, Sort.by("dueDate"));
             }
         }
         else if(dueDate!=null){
-            if (dueDate.equals("Today")) {
+            if (DueDateFilter.Today.equals(dueDate)) {
 
                 return taskRepository.getAllByDueDateEqualsAndUserName(LocalDateTime.now(), userName);
             }
-            if (dueDate.equals("Overdue")) {
+            if (DueDateFilter.Overdue.equals(dueDate)) {
 
                 return taskRepository.getAllByDueDateIsBeforeAndUserName(LocalDateTime.now(), userName, Sort.by("dueDate"));
             }
-            if (dueDate.equals("This Week")) {
+            if (DueDateFilter.ThisWeek.equals(dueDate)) {
                 return taskRepository.getAllByDueDateBetweenAndUserName(LocalDateTime.now(), LocalDateTime.now().plusDays(6), userName, Sort.by("dueDate"));
             }
-            if (dueDate.equals("Next Week")) {
+            if (DueDateFilter.NextWeek.equals(dueDate)) {
                 return taskRepository.getAllByDueDateBetweenAndUserName(LocalDateTime.now().plusDays(7), LocalDateTime.now().plusDays(13), userName, Sort.by("dueDate"));
             }
         }

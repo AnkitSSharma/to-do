@@ -35,10 +35,6 @@ public class EmailScheduler {
                     emailSenderService.sendSimpleEmail(user.getEmail(), "Pending Task with Title" + task.getTitle(), "This is a Reminder");
                 }
             }
-
         }
-
-
     }
-
 }

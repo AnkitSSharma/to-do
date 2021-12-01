@@ -27,7 +27,7 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
 
     Task getByIdAndUserName(Long taskid, String userName);
 
-    List<Task> getAllByDueDateEqualsAndUserName(LocalDateTime dueDate, String userName);
+    List<Task> getAllByDueDateAndUserName(LocalDateTime dueDate, String userName);
     List<Task> getAllByDueDateIsBeforeAndUserName(LocalDateTime dueDate, String  userName, Sort sort);
     List<Task> getAllByDueDateBetweenAndUserName(LocalDateTime start, LocalDateTime end, String userName, Sort sort);
 
@@ -35,7 +35,7 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
 
     List<Task> getAllByDueDateIsBeforeAndUserNameAndTitleContainsIgnoreCase(LocalDateTime dueDate, String userName, String title, Sort sort);
 
-    List<Task> getAllByDueDateEqualsAndUserNameAndTitleContainsIgnoreCase(LocalDateTime dueDate, String userName, String title);
+    List<Task> getAllByDueDateAndUserNameAndTitleContainsIgnoreCase(LocalDateTime dueDate, String userName, String title);
 
     List<Task> getAllByStatus(Task.TaskStatus status);
 }

@@ -46,14 +46,14 @@ public class TaskService {
         if(title!=null){
             if (DueDateFilter.Today.equals(dueDate)) {
 
-                return taskRepository.getAllByDueDateAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), userName,title);
+                return taskRepository.getAllByDueDateAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now().minusHours(23), userName,title);
             }
             if (DueDateFilter.Overdue.equals(dueDate)) {
 
                 return taskRepository.getAllByDueDateIsBeforeAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), userName,title, Sort.by("dueDate"));
             }
             if (DueDateFilter.ThisWeek.equals(dueDate)) {
-                return taskRepository.getAllByDueDateBetweenAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), LocalDateTime.now().plusDays(6), userName,title, Sort.by("dueDate"));
+                return taskRepository.getAllByDueDateBetweenAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now().minusHours(23), LocalDateTime.now().plusDays(6), userName,title, Sort.by("dueDate"));
             }
             if (DueDateFilter.NextWeek.equals(dueDate)) {
                 return taskRepository.getAllByDueDateBetweenAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now().plusDays(7), LocalDateTime.now().plusDays(13), userName,title, Sort.by("dueDate"));
@@ -62,14 +62,14 @@ public class TaskService {
         else if(dueDate!=null){
             if (DueDateFilter.Today.equals(dueDate)) {
 
-                return taskRepository.getAllByDueDateAndUserName(LocalDateTime.now(), userName);
+                return taskRepository.getAllByDueDateAndUserName(LocalDateTime.now().minusHours(23), userName);
             }
             if (DueDateFilter.Overdue.equals(dueDate)) {
 
                 return taskRepository.getAllByDueDateIsBeforeAndUserName(LocalDateTime.now(), userName, Sort.by("dueDate"));
             }
             if (DueDateFilter.ThisWeek.equals(dueDate)) {
-                return taskRepository.getAllByDueDateBetweenAndUserName(LocalDateTime.now(), LocalDateTime.now().plusDays(6), userName, Sort.by("dueDate"));
+                return taskRepository.getAllByDueDateBetweenAndUserName(LocalDateTime.now().minusHours(23), LocalDateTime.now().plusDays(6), userName, Sort.by("dueDate"));
             }
             if (DueDateFilter.NextWeek.equals(dueDate)) {
                 return taskRepository.getAllByDueDateBetweenAndUserName(LocalDateTime.now().plusDays(7), LocalDateTime.now().plusDays(13), userName, Sort.by("dueDate"));

@@ -36,8 +36,12 @@ public class UserService {
         return ResponseEntity.ok("User Created Succesfully");
     }
 
-    public boolean isValid(String name, String password) {
-        User user = userRepository.getByUserName(name);
+    public boolean isValid(String userName, String password) {
+        if(!userRepository.existsByUserName(userName)){
+            return false;
+        }
+
+        User user = userRepository.getByUserName(userName);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(password,user.getPassword());
     }

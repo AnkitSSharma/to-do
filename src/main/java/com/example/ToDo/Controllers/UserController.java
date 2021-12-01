@@ -34,7 +34,7 @@ public class UserController {
             return ResponseEntity.ok(jwt);
         }
         else
-            return ResponseEntity.ok("UnAuthenticated User");
+            return ResponseEntity.ok("Username or Password is Incorrect");
     }
 
     @PostMapping("/user/signup")

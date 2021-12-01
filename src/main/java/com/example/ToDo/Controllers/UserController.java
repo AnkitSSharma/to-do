@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 public class UserController {
     @Autowired
@@ -25,7 +27,7 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/user/login")
-    public ResponseEntity<String> isValid(@RequestBody User user){
+    public ResponseEntity<String> isValid(@Valid @RequestBody User user){
         if(userService.isValid(user.getUserName(),user.getPassword())) {
             UserDetails userDetails = myuserDetailService.loadUserByUsername(user.getUserName());
             String jwt = jwtUtil.generateToken((MyUserDetailImpl) userDetails);

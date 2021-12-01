@@ -1,10 +1,13 @@
 package com.example.ToDo.Entities;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="users",uniqueConstraints =@UniqueConstraint(name = "user_name",columnNames={"name","email"}))
+@Table(name="users",uniqueConstraints =@UniqueConstraint(name = "user_name",columnNames={"user_name","email"}))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,10 +15,12 @@ public class User {
 
     @Column(name = "name")
     private String name;
+    @NotEmpty
     @Column(name = "user_name")
     private String userName;
     @Column(name = "email")
     private String email;
+    @NotEmpty
     @Column(name="password")
     private String password;
     @Column(name = "created")

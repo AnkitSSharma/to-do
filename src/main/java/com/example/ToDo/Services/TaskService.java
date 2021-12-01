@@ -6,9 +6,13 @@ import com.example.ToDo.Entities.Task;
 import com.example.ToDo.Repositories.SubTaskRepository;
 import com.example.ToDo.Repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 
 @Component
@@ -26,21 +30,48 @@ public class TaskService {
         return ResponseEntity.ok("Task Created Successfully");
     }
 
-    public List<Task> getAllTask(String userName, Task.TaskStatus status, String title) {
+    public List<Task> getAllTask(String userName, Task.TaskStatus status, String title, String dueDate) {
+        if(status!=null){
+            return taskRepository.getAllByUserNameAndStatus(userName,status, Sort.by("dueDate"));
+        }
+        if(title!=null && dueDate==null){
+            return taskRepository.getByUserNameAndTitleContainsIgnoreCase(userName,title,Sort.by("dueDate"));
+        }
         if(title!=null){
-            return taskRepository.getByUserNameAndTitleContainsIgnoreCase(userName,title);
+            if (dueDate.equals("Today")) {
+
+                return taskRepository.getAllByDueDateEqualsAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), userName,title);
+            }
+            if (dueDate.equals("Overdue")) {
+
+                return taskRepository.getAllByDueDateIsBeforeAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), userName,title, Sort.by("dueDate"));
+            }
+            if (dueDate.equals("This Week")) {
+                return taskRepository.getAllByDueDateBetweenAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now(), LocalDate.now().plusDays(6), userName,title, Sort.by("dueDate"));
+            }
+            if (dueDate.equals("Next Week")) {
+                return taskRepository.getAllByDueDateBetweenAndUserNameAndTitleContainsIgnoreCase(LocalDateTime.now().plusDays(7), LocalDate.now().plusDays(13), userName,title, Sort.by("dueDate"));
+            }
         }
+        else if(dueDate!=null){
+            if (dueDate.equals("Today")) {
 
-        if(status==null){
-            return taskRepository.getAllByUserName(userName);
+                return taskRepository.getAllByDueDateEqualsAndUserName(LocalDateTime.now(), userName);
+            }
+            if (dueDate.equals("Overdue")) {
+
+                return taskRepository.getAllByDueDateIsBeforeAndUserName(LocalDateTime.now(), userName, Sort.by("dueDate"));
+            }
+            if (dueDate.equals("This Week")) {
+                return taskRepository.getAllByDueDateBetweenAndUserName(LocalDateTime.now(), LocalDateTime.now().plusDays(6), userName, Sort.by("dueDate"));
+            }
+            if (dueDate.equals("Next Week")) {
+                return taskRepository.getAllByDueDateBetweenAndUserName(LocalDateTime.now().plusDays(7), LocalDateTime.now().plusDays(13), userName, Sort.by("dueDate"));
+            }
         }
+        return taskRepository.getAllByUserName(userName, Sort.by("dueDate"));
 
-        return taskRepository.getAllByUserNameAndStatus(userName,status);
 
-    }
-
-    public List<Task> getAllByTitle(String userName, String title) {
-        return taskRepository.getByUserNameAndTitleContainsIgnoreCase(userName,title);
     }
 
     public ResponseEntity<String> createSubTask(String userName, SubTask subTask, Long taskId) {
@@ -53,5 +84,17 @@ public class TaskService {
         }
         subTaskRepository.save(subTask);
         return ResponseEntity.ok("Sub Task Created Successfully");
+    }
+
+    public ResponseEntity<String> markComplete(String userName, Long taskid) {
+        Task task = taskRepository.getByIdAndUserName(taskid, userName);
+        task.setStatus(Task.TaskStatus.Completed);
+        List<SubTask> subtasks = task.getSubtasks();
+        for ( SubTask subtask : subtasks){
+            subtask.setStatus(SubTask.TaskStatus.Completed);
+            subTaskRepository.save(subtask);
+        }
+        taskRepository.save(task);
+        return ResponseEntity.ok("Task marked Completed");
     }
 }
